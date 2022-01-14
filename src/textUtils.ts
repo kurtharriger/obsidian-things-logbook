@@ -40,6 +40,7 @@ export async function updateSection(
   heading: string,
   sectionContents: string
 ): Promise<void> {
+  console.log('editing file: ', file.basename);
   const headingLevel = getHeadingLevel(heading);
 
   const { vault } = app;
@@ -72,10 +73,12 @@ export async function updateSection(
         nextSectionLineNum !== -1
           ? { line: nextSectionLineNum - 1, ch: 0 }
           : { line: fileLines.length, ch: 0 };
+      console.log('found: replaceRange ', { from, to });
       editor.replaceRange(`${sectionContents}\n`, from, to);
       return;
     } else {
       const pos = { line: fileLines.length, ch: 0 };
+      console.log('not found: replaceRange ', { pos });
       editor.replaceRange(`\n\n${sectionContents}`, pos, pos);
       return;
     }
